@@ -32,7 +32,24 @@ app.post("/repositories", (request, response) => {
 });
 
 app.put("/repositories/:id", (request, response) => {
-  // TODO
+  const { id } = request.params;
+  const repositoryIndex = repositories.findIndex(repository => repository.id === id);
+
+  if (repositoryIndex < 0) {
+    return response.status(404).json("Repository doesnt exists");
+  }
+
+  const { title, url, techs } = request.body;
+
+  const repository = repositories[repositoryIndex];
+
+  repository.title = title;
+  repository.url = url;
+  repository.techs = techs;
+
+  repositories[repositoryIndex] = repository;
+
+  return response.json(repository);
 });
 
 app.delete("/repositories/:id", (request, response) => {
